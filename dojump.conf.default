@@ -1,0 +1,28 @@
+# First thing first: if you do not have a Digital Ocean account:
+# https://m.do.co/c/49c621753ed3 ($100 credit for 60 days)
+#
+# Command to retrieve SSH key fingerprint:
+# doctl compute ssh-key list
+#
+# Example output:
+# ID          Name       FingerPrint
+# 12345678    yourname   4d:23:e6:e4:8c:17:d2:cf:89:47:36:b5:c7:33:40:4e
+#
+# If you do not have any SSH keys on your DO account:
+# https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/
+
+DROPLET_SSH_KEYS=""
+
+############################################### PRESETS ###############################################
+
+# nyc1 is default but you can change to: nyc3 sfo2 sfo3 ams3 sgp1 lon1 fra1 tor1 blr1
+DROPLET_REGION="nyc1"
+
+# You can change this but sshuttle need python3 and debian-10-x64 has it by default
+DROPLET_IMAGE="debian-10-x64"
+
+# Smallest droplet does fine for our purpose $5/mo:
+DROPLET_SIZE="s-1vcpu-1gb"
+
+# More information on Digital Ocean command line client:
+# https://www.digitalocean.com/community/tutorials/how-to-use-doctl-the-official-digitalocean-command-line-client
