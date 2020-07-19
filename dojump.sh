@@ -10,16 +10,20 @@ get_droplet_ip(){
   DROPLET_IP=$(doctl compute droplet list | grep jumpbox | awk '{print $3}')
 }
 
+ssh_status(){
+  echo -ne "."
+  nc -w1 $DROPLET_IP 22
+}
+
 # Start sshuttle
 sshuttle_start(){
-  get_droplet_ip
   if [ -z "$DROPLET_IP" ]; then
     show_error "ERROR: Could not determine Droplet's IP address."
     show_error "Perhaps not enough time to start remote SSH server, try again..."
     exit 1
   fi
   echo "Tunneling all network traffic via $DROPLET_IP";
-  sshuttle --dns -r root@$DROPLET_IP 0/0
+  sshuttle --dns -e 'ssh -q -o CheckHostIP=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -r root@$DROPLET_IP 0/0
 }
 
 # Check if requirements doctl and sshuttle are installed
@@ -75,13 +79,12 @@ if [ -z "$DROPLET_IP" ]; then
     --wait jumpbox > /dev/null 2>&1
 
   echo " done"
-  echo "Just a few more seconds until remote SSH server starts..."
 
-  SECS=15
-  while [ $SECS -gt 0 ]; do
-    echo -ne "$SECS\033[0K\r"
-    sleep 1
-    : $((SECS--))
+  get_droplet_ip
+  echo ""
+  echo -ne "Checking remote SSH Server."
+  until ssh_status; do
+    sleep 2
   done
 
   sshuttle_start
