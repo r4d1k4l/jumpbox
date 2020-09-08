@@ -23,7 +23,7 @@ sshuttle_start(){
     exit 1
   fi
   echo "Tunneling all network traffic via $DROPLET_IP";
-  sshuttle --dns -e 'ssh -q -o CheckHostIP=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -r root@$DROPLET_IP 0/0
+  sshuttle --dns -e 'ssh -q -o CheckHostIP=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -r root@$DROPLET_IP 0/0 -x $DROPLET_IP
 }
 
 # Check if requirements doctl and sshuttle are installed
